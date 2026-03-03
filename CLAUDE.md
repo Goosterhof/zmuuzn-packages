@@ -71,7 +71,8 @@ All hardcoded via inline styles (shared across all experiments):
 | Border | `#2E2E52` | Separators between rows and sections |
 | Text (muted) | `#9E9EBF` | Inactive items, labels |
 | Text (active) | `#E0E0E0` | Active/hover items, user name |
-| Active indicator | Per-experiment `accentColor` | Bottom border (desktop), left border (mobile) |
+| Wordmark gold | `#F0D040` | "ZMUUZN" wordmark (brand gold) |
+| Active indicator | Per-experiment `accentColor` | Bottom border + glow (desktop), left border (mobile) |
 
 ### Experiment Accent Colors
 
@@ -80,6 +81,31 @@ All hardcoded via inline styles (shared across all experiments):
 | Gatekeeper | Amber | `#D97706` |
 | War Table | Gold | `#FFD100` |
 | Crucible | Strava Orange | `#FC4C02` |
+
+### Typography
+
+Fonts are loaded via Google Fonts `@import` in UnoCSS preflights (compiled into `dist/lab-nav.css`):
+
+| Token | Font | Weight | Usage |
+|-------|------|--------|-------|
+| `lab-font-display` | Epilogue | 800 | "ZMUUZN" wordmark |
+| `lab-font-mono` | IBM Plex Mono | 400–600 | Experiment names, nav links, user menu, section headers |
+
+Both are UnoCSS shortcuts defined in `uno.config.ts`. Fallback stacks ensure graceful degradation if fonts fail to load.
+
+### Animations
+
+Keyframes defined in UnoCSS preflights:
+
+| Animation | Duration | Usage |
+|-----------|----------|-------|
+| `lab-glow-pulse` | 3s infinite | Breathing glow on active experiment status dot |
+| `slide-in-right` | 250ms | Mobile drawer slide-in from right |
+
+Additional transitions via Vue `<Transition>` component:
+- **UserMenu dropdown**: 150ms fade + translateY enter, 100ms leave
+- **Mobile drawer overlay**: 250ms opacity enter, 200ms leave
+- **Backdrop**: `backdrop-blur-sm` (4px blur)
 
 ## Commands
 
@@ -106,4 +132,4 @@ npm run test:watch     # vitest (watch mode)
 - **Version bumping is manual**: Publish to GitHub Packages requires incrementing `version` in `package.json` — CI does not auto-bump
 - **Hardcoded experiment registry**: Adding a new experiment requires editing `src/experiments.ts` — not dynamic
 - **No accessibility audit**: Basic `aria-label` attributes on buttons, but no comprehensive a11y testing
-- **No transition animations**: Drawer appears/disappears instantly — could add CSS transitions
+- **Font loading dependency**: Google Fonts loaded via CSS `@import` — `display=swap` prevents FOIT but initial render uses fallback fonts

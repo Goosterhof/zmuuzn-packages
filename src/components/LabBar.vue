@@ -23,8 +23,10 @@ const accentColor = computed(
 <template>
   <header hidden md:block>
     <!-- Row 1: Laboratory Bar -->
-    <div flex items-center justify-between px-6 py-2 bg="[#0F0F1F]" border-b-1 border-b="[#2E2E52]">
-      <span class="text-[#9E9EBF]" font-bold text-sm tracking-wider uppercase>Zmuuzn</span>
+    <div flex items-center justify-between px-6 py-3 bg="[#0F0F1F]" border-b-1 border-b="[#2E2E52]">
+      <span class="text-[#F0D040]" lab-font-display font-800 text-sm tracking-wide uppercase
+        >Zmuuzn</span
+      >
 
       <ExperimentSwitcher :current-experiment="currentExperiment" />
 
@@ -38,20 +40,24 @@ const accentColor = computed(
       items-center
       gap-6
       px-6
-      py-2
+      py-2.5
       bg="[#0F0F1F]"
       border-b-1
-      border-b="[#2E2E52]"
+      :style="{ borderBottomColor: '#2E2E52', boxShadow: `0 1px 6px ${accentColor}22` }"
     >
       <router-link
         v-for="item in localNav"
         :key="item.to"
         :to="item.to"
+        lab-font-mono
         text-sm
+        font-400
+        uppercase
+        tracking-wider
         no-underline
         pb-1
         transition-colors
-        :class="item.isActive ? 'font-600' : ''"
+        :class="item.isActive ? 'font-500' : ''"
         :style="{
           color: item.isActive ? '#E0E0E0' : '#9E9EBF',
           borderBottom: item.isActive ? `2px solid ${accentColor}` : '2px solid transparent',

@@ -1,3 +1,4 @@
+import "./fonts.css";
 import "virtual:uno.css";
 
 export { default as LabBar } from "./components/LabBar.vue";
