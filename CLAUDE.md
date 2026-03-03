@@ -14,20 +14,20 @@ Shared Vue 3 navigation component library for the Zmuuzn laboratory. Provides a 
 
 ### Distribution Model
 
-This is a **compiled library** published to **GitHub Packages** as `@zmuuzn/lab-nav`. Vite library mode compiles `.vue` and `.ts` source into:
+This is a **compiled library** published to **GitHub Packages** as `@goosterhof/lab-nav`. Vite library mode compiles `.vue` and `.ts` source into:
 - `dist/lab-nav.js` — ES module bundle (vue + vue-router externalized)
 - `dist/lab-nav.css` — UnoCSS utilities extracted during build
 - `dist/*.d.ts` — TypeScript declarations generated via `vite-plugin-dts`
 
 Consumers install from GitHub Packages:
 ```bash
-npm install @zmuuzn/lab-nav
+npm install @goosterhof/lab-nav
 ```
 
 Consumers import components and the bundled CSS:
 ```ts
-import { LabBar, LabBarMobile } from "@zmuuzn/lab-nav";
-import "@zmuuzn/lab-nav/style.css";
+import { LabBar, LabBarMobile } from "@goosterhof/lab-nav";
+import "@goosterhof/lab-nav/style.css";
 ```
 
 No UnoCSS config or tsconfig changes needed in consumers — the package ships compiled JS, CSS, and type declarations.
