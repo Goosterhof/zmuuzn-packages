@@ -1,10 +1,49 @@
 # CLAUDE.md — The Shared Nervous System
 
-Shared Vue 3 navigation component library for the Zmuuzn laboratory. Provides a unified navigation bar that connects all experiments under `*.zmuuzn.nl`, allowing users to switch between experiments and navigate within them.
+Monorepo for shared packages consumed by Zmuuzn laboratory experiments. Uses **npm workspaces** to manage multiple packages under `packages/`.
 
-## Architecture
+## Monorepo Structure
 
-### Tech Stack
+```
+packages/
+└── lab-nav/          # @goosterhof/lab-nav — Vue 3 navigation component library
+package.json          # Workspace root (private, delegates to packages)
+.npmrc                # GitHub Packages auth scope
+.github/workflows/    # CI: quality gates + publish (runs across all workspaces)
+```
+
+Each package is **fully self-contained** — its own `vite.config.ts`, `vitest.config.ts`, `uno.config.ts`, `tsconfig.json`, and `package.json`. No shared root configs. Adding a new package is as simple as creating a new directory under `packages/`.
+
+### Root Commands (run across all packages)
+
+```bash
+npm run check          # Full pipeline for all packages
+npm run build          # Build all packages
+npm run test           # Test all packages
+npm run dev            # Dev server for lab-nav (single package)
+```
+
+### Per-Package Commands
+
+```bash
+npm run check -w packages/lab-nav    # Quality gates for lab-nav only
+npm run build -w packages/lab-nav    # Build lab-nav only
+npm run test -w packages/lab-nav     # Test lab-nav only
+```
+
+### Adding a New Package
+
+1. Create `packages/<name>/` with its own `package.json`, configs, `src/`, `tests/`
+2. Run `npm install` from root to link the new workspace
+3. Root scripts automatically include it via `--workspaces`
+
+## Packages
+
+### `@goosterhof/lab-nav` — Navigation Component Library
+
+Shared Vue 3 navigation bar connecting all experiments under `*.zmuuzn.nl`.
+
+#### Tech Stack
 
 - **Vue 3** (Composition API, `<script setup>`)
 - **TypeScript** (strict mode, `vue-tsc` for type-checking)
@@ -12,9 +51,9 @@ Shared Vue 3 navigation component library for the Zmuuzn laboratory. Provides a 
 - **Vitest** + `happy-dom` + `@vue/test-utils` for testing
 - **OxLint** + **OxFmt** for lint and format
 
-### Distribution Model
+#### Distribution Model
 
-This is a **compiled library** published to **GitHub Packages** as `@goosterhof/lab-nav`. Vite library mode compiles `.vue` and `.ts` source into:
+Compiled library published to **GitHub Packages** as `@goosterhof/lab-nav`. Vite library mode compiles `.vue` and `.ts` source into:
 - `dist/lab-nav.js` — ES module bundle (vue + vue-router externalized)
 - `dist/lab-nav.css` — UnoCSS utilities extracted during build
 - `dist/*.d.ts` — TypeScript declarations generated via `vite-plugin-dts`
@@ -32,27 +71,34 @@ import "@goosterhof/lab-nav/style.css";
 
 No UnoCSS config or tsconfig changes needed in consumers — the package ships compiled JS, CSS, and type declarations.
 
-### Directory Structure
+#### Directory Structure
 
 ```
-src/
-├── index.ts                    # Barrel export
-├── types.ts                    # ExperimentId, LabUser, LocalNavItem, ExperimentConfig
-├── experiments.ts              # Hardcoded experiment registry (3 experiments)
-├── fonts.css                   # Google Fonts @import (Epilogue, IBM Plex Mono)
-└── components/
-    ├── BrandMark.vue           # Three-segment pill: stars | wordmark | app name
-    ├── LabBar.vue              # Desktop: two-tier nav (lab bar + local nav)
-    ├── LabBarMobile.vue        # Mobile: hamburger → slide-out drawer
-    ├── ExperimentSwitcher.vue  # Horizontal experiment list with active indicator
-    └── UserMenu.vue            # User name + logout dropdown
-tests/
-├── BrandMark.spec.ts
-├── experiments.spec.ts
-├── ExperimentSwitcher.spec.ts
-├── UserMenu.spec.ts
-├── LabBar.spec.ts
-└── LabBarMobile.spec.ts
+packages/lab-nav/
+├── src/
+│   ├── index.ts                    # Barrel export
+│   ├── types.ts                    # ExperimentId, LabUser, LocalNavItem, ExperimentConfig
+│   ├── experiments.ts              # Hardcoded experiment registry (3 experiments)
+│   ├── fonts.css                   # Google Fonts @import (Epilogue, IBM Plex Mono)
+│   └── components/
+│       ├── BrandMark.vue           # Three-segment pill: stars | wordmark | app name
+│       ├── LabBar.vue              # Desktop: two-tier nav (lab bar + local nav)
+│       ├── LabBarMobile.vue        # Mobile: hamburger → slide-out drawer
+│       ├── ExperimentSwitcher.vue  # Horizontal experiment list with active indicator
+│       └── UserMenu.vue            # User name + logout dropdown
+├── tests/
+│   ├── BrandMark.spec.ts
+│   ├── experiments.spec.ts
+│   ├── ExperimentSwitcher.spec.ts
+│   ├── UserMenu.spec.ts
+│   ├── LabBar.spec.ts
+│   └── LabBarMobile.spec.ts
+├── vite.config.ts                  # Library build config
+├── vitest.config.ts                # Test config (happy-dom)
+├── uno.config.ts                   # UnoCSS theme + shortcuts
+├── tsconfig.json / tsconfig.build.json
+├── oxlintrc.json                   # Lint rules
+└── package.json                    # Package manifest (v0.2.1)
 ```
 
 ### Key Patterns
@@ -125,20 +171,24 @@ Additional transitions via Vue `<Transition>` component:
 
 ## Commands
 
+From the **repo root**:
 ```bash
-npm run check          # Full pipeline: type-check + lint + format:check + test
-npm run build          # Vite library build → dist/
-npm run type-check     # vue-tsc --noEmit
-npm run lint           # oxlint src/ tests/ --deny-warnings
-npm run format         # oxfmt --write src/ tests/
-npm run format:check   # oxfmt --check src/ tests/
-npm run test           # vitest run
-npm run test:watch     # vitest (watch mode)
+npm run check          # Full pipeline across all workspaces
+npm run build          # Build all packages
+npm run test           # Test all packages
+```
+
+From **inside a package** (e.g., `packages/lab-nav/`), or with `-w`:
+```bash
+npm run check -w packages/lab-nav    # Full pipeline: type-check + lint + format:check + test
+npm run build -w packages/lab-nav    # Vite library build → dist/
+npm run test -w packages/lab-nav     # vitest run
+npm run format -w packages/lab-nav   # oxfmt --write src/ tests/
 ```
 
 ## Conventions
 
-- **Always run `npm run check`** before committing changes to this package
+- **Always run `npm run check`** (from root or with `-w`) before committing changes
 - **Always run `npm run format`** after any code changes (OxFmt enforces consistent style)
 - **UnoCSS in build**: `uno.config.ts` provides `presetUno` + `presetAttributify` + theme tokens + shortcuts + preflights (fonts, keyframes, `prefers-reduced-motion`) for CSS extraction during `vite build`. Use theme utilities (`bg-lab-bg`, `text-lab-active`) for static colors. Avoid `text="[#hex]"` attributify on `<a>` elements — it collides with the DOM `text` property
 - **Test `.vue` components** with `Teleport` stubbed (`global: { stubs: { Teleport: true } }`) so drawer content renders inline for assertions

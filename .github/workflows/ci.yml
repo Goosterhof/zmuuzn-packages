@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Run quality gates
-        run: npm run check
+        run: npm run check --workspaces
 
   publish:
     name: Publish
@@ -48,9 +48,9 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: npm run build --workspaces
 
       - name: Publish to GitHub Packages
-        run: npm publish
+        run: npm publish --workspaces
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
