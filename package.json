@@ -1,6 +1,6 @@
 {
   "name": "@goosterhof/lab-nav",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "type": "module",
   "exports": {
@@ -19,6 +19,7 @@
     "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
     "type-check": "vue-tsc --noEmit",
     "test": "vitest run",
@@ -35,7 +36,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.4",
     "@vue/test-utils": "^2.4.0",
-    "happy-dom": "^18.0.0",
+    "happy-dom": "^20.8.3",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
     "typescript": "^5.9.3",
