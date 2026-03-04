@@ -27,9 +27,9 @@ const mountMobile = (props: Record<string, unknown> = {}) =>
   });
 
 describe("LabBarMobile", () => {
-  it("should render the Zmuuzn logo and hamburger button", () => {
+  it("should render the brand mark pill and hamburger button", () => {
     const wrapper = mountMobile();
-    expect(wrapper.text()).toContain("Zmuuzn");
+    expect(wrapper.text()).toContain("zmuuzn");
     expect(wrapper.find('button[aria-label="Open menu"]').exists()).toBe(true);
   });
 

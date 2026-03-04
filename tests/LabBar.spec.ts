@@ -13,7 +13,7 @@ const createTestRouter = () =>
   });
 
 describe("LabBar", () => {
-  it("should render the Zmuuzn logo text", () => {
+  it("should render the brand mark pill with zmuuzn wordmark", () => {
     const wrapper = mount(LabBar, {
       props: {
         currentExperiment: "war-table",
@@ -22,7 +22,7 @@ describe("LabBar", () => {
       },
       global: { plugins: [createTestRouter()] },
     });
-    expect(wrapper.text()).toContain("Zmuuzn");
+    expect(wrapper.text()).toContain("zmuuzn");
   });
 
   it("should render the experiment switcher", () => {

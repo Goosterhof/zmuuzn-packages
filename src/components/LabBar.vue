@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import type { ExperimentId, LabUser, LocalNavItem } from "../types";
 import { experiments } from "../experiments";
+import BrandMark from "./BrandMark.vue";
 import ExperimentSwitcher from "./ExperimentSwitcher.vue";
 import UserMenu from "./UserMenu.vue";
 
@@ -24,7 +25,7 @@ const accentColor = computed(
   <header hidden md:block>
     <!-- Row 1: Laboratory Bar -->
     <div flex items-center justify-between px-6 py-3 bg-lab-bg border-b-1 border-b-lab-border>
-      <span text-lab-gold lab-font-display font-800 text-sm tracking-wide uppercase>Zmuuzn</span>
+      <BrandMark size="sm" :current-experiment="currentExperiment" />
 
       <ExperimentSwitcher :current-experiment="currentExperiment" />
 

@@ -2,6 +2,7 @@
 import { ref, computed } from "vue";
 import type { ExperimentId, LabUser, LocalNavItem } from "../types";
 import { experiments } from "../experiments";
+import BrandMark from "./BrandMark.vue";
 
 const { currentExperiment, localNav } = defineProps<{
   currentExperiment: ExperimentId;
@@ -29,7 +30,7 @@ const handleLogout = () => {
   <header block md:hidden>
     <!-- Collapsed Bar -->
     <div flex items-center justify-between px-4 py-3 bg-lab-bg border-b-1 border-b-lab-border>
-      <span text-lab-gold lab-font-display font-800 text-sm tracking-wide uppercase>Zmuuzn</span>
+      <BrandMark size="xs" :current-experiment="currentExperiment" />
       <button
         text-lab-muted
         hover:text-lab-active
