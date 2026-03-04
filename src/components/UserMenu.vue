@@ -12,9 +12,15 @@ const emit = defineEmits<{
 
 const menuOpen = ref(false);
 const menuRef = useTemplateRef<HTMLElement>("menuRef");
+const triggerRef = useTemplateRef<HTMLButtonElement>("triggerRef");
 
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value;
+};
+
+const closeMenu = () => {
+  menuOpen.value = false;
+  triggerRef.value?.focus();
 };
 
 const handleClickOutside = (event: MouseEvent) => {
@@ -30,19 +36,19 @@ onUnmounted(() => document.removeEventListener("click", handleClickOutside));
 <template>
   <div ref="menuRef" relative>
     <button
-      class="text-[#9E9EBF] hover:text-[#E0E0E0]"
+      ref="triggerRef"
+      text-lab-muted
+      hover:text-lab-active
       lab-font-mono
+      lab-ghost-btn
+      lab-focus
       text-sm
       font-500
       flex
       items-center
       gap-1.5
-      bg-transparent
-      border-none
-      cursor-pointer
       py-1.5
       px-3
-      transition-colors
       @click="toggleMenu"
     >
       {{ user.name }}
@@ -67,22 +73,22 @@ onUnmounted(() => document.removeEventListener("click", handleClickOutside));
         min-w-32
         z-50
         border-1
-        bg="[#1A1A2E]"
-        border="[#2E2E52]"
+        bg-lab-surface
+        border-lab-border
+        @keydown.escape="closeMenu"
       >
         <button
-          class="text-[#9E9EBF] hover:text-[#E0E0E0]"
+          text-lab-muted
+          hover:text-lab-active
           lab-font-mono
+          lab-ghost-btn
+          lab-focus
           w-full
           text-left
           text-sm
           font-400
           px-3
           py-2
-          bg-transparent
-          border-none
-          cursor-pointer
-          transition-colors
           @click="emit('logout')"
         >
           Logout

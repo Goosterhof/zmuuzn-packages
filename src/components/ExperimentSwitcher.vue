@@ -8,7 +8,7 @@ const { currentExperiment } = defineProps<{
 }>();
 
 const accentColor = computed(
-  () => experiments.find((e) => e.id === currentExperiment)?.accentColor ?? "#E0E0E0",
+  () => experiments.find((e) => e.id === currentExperiment)?.accentColor ?? "#F5F0E8",
 );
 </script>
 
@@ -18,7 +18,7 @@ const accentColor = computed(
       <li v-for="exp in experiments" :key="exp.id">
         <span
           v-if="exp.id === currentExperiment"
-          class="text-[#E0E0E0]"
+          text-lab-active
           lab-font-mono
           text-sm
           font-500
@@ -52,8 +52,10 @@ const accentColor = computed(
         <a
           v-else
           :href="exp.url"
-          class="text-[#9E9EBF] hover:text-[#E0E0E0]"
+          text-lab-muted
+          hover:text-lab-active
           lab-font-mono
+          lab-focus
           text-sm
           font-400
           uppercase
