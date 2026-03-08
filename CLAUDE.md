@@ -98,7 +98,7 @@ packages/lab-nav/
 ├── uno.config.ts                   # UnoCSS theme + shortcuts
 ├── tsconfig.json / tsconfig.build.json
 ├── oxlintrc.json                   # Lint rules
-└── package.json                    # Package manifest (v0.2.1)
+└── package.json                    # Package manifest (v0.3.0)
 ```
 
 ### Key Patterns
