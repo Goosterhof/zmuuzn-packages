@@ -51,6 +51,17 @@ jobs:
         run: npm run build --workspaces
 
       - name: Publish to GitHub Packages
-        run: npm publish --workspaces
+        run: |
+          for pkg in packages/*/; do
+            name=$(node -p "require('./${pkg}package.json').name")
+            local_version=$(node -p "require('./${pkg}package.json').version")
+            remote_version=$(npm view "$name" version 2>/dev/null || echo "0.0.0")
+            if [ "$local_version" != "$remote_version" ]; then
+              echo "Publishing $name@$local_version (registry has $remote_version)"
+              npm publish -w "$pkg"
+            else
+              echo "Skipping $name@$local_version — already published"
+            fi
+          done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
