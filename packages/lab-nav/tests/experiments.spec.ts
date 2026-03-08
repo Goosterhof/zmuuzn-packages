@@ -30,4 +30,10 @@ describe("experiments", () => {
       expect(exp.label.length).toBeGreaterThan(0);
     }
   });
+
+  it("should have non-empty exit labels for experiment-aware logout", () => {
+    for (const exp of experiments) {
+      expect(exp.exitLabel.length).toBeGreaterThan(0);
+    }
+  });
 });

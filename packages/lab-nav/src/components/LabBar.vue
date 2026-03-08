@@ -29,7 +29,7 @@ const accentColor = computed(
 
       <ExperimentSwitcher :current-experiment="currentExperiment" />
 
-      <UserMenu :user="user" @logout="emit('logout')" />
+      <UserMenu :user="user" :current-experiment="currentExperiment" @logout="emit('logout')" />
     </div>
 
     <!-- Row 2: Local Navigation -->

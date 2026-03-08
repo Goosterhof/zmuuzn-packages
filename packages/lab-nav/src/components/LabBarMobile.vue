@@ -16,9 +16,11 @@ const emit = defineEmits<{
 
 const drawerOpen = ref(false);
 
-const accentColor = computed(
-  () => experiments.find((e) => e.id === currentExperiment)?.accentColor ?? "#F5F0E8",
-);
+const currentConfig = computed(() => experiments.find((e) => e.id === currentExperiment));
+
+const accentColor = computed(() => currentConfig.value?.accentColor ?? "#F5F0E8");
+
+const exitLabel = computed(() => currentConfig.value?.exitLabel ?? "Logout");
 
 const handleLogout = () => {
   drawerOpen.value = false;
@@ -90,9 +92,9 @@ const handleLogout = () => {
               </button>
             </div>
 
-            <!-- Section: Experiments -->
+            <!-- Section: Stations -->
             <div mb-6>
-              <p lab-section-label mb-3 m-0>Experiments</p>
+              <p lab-section-label mb-3 m-0>Stations</p>
               <div flex flex-col gap-1>
                 <a
                   v-for="exp in experiments"
@@ -109,6 +111,7 @@ const handleLogout = () => {
                   items-center
                   gap-2.5
                   transition-colors
+                  class="drawer-experiment"
                   :class="exp.id === currentExperiment ? 'font-500' : ''"
                   :style="{
                     color: exp.id === currentExperiment ? '#F5F0E8' : '#9E9EBF',
@@ -125,11 +128,13 @@ const handleLogout = () => {
                     h-1.5
                     rounded-full
                     shrink-0
+                    class="drawer-dot"
                     :style="{
                       backgroundColor: exp.accentColor,
                       opacity: exp.id === currentExperiment ? 1 : 0.4,
                       boxShadow:
                         exp.id === currentExperiment ? `0 0 6px ${exp.accentColor}` : 'none',
+                      transition: 'opacity 200ms ease',
                     }"
                   />
                   {{ exp.label }}
@@ -137,9 +142,9 @@ const handleLogout = () => {
               </div>
             </div>
 
-            <!-- Section: Navigation -->
+            <!-- Section: Corridors -->
             <div v-if="localNav.length > 0" mb-6>
-              <p lab-section-label mb-3 m-0>Navigation</p>
+              <p lab-section-label mb-3 m-0>Corridors</p>
               <div flex flex-col gap-1>
                 <router-link
                   v-for="item in localNav"
@@ -167,7 +172,7 @@ const handleLogout = () => {
               </div>
             </div>
 
-            <!-- Section: Logout -->
+            <!-- Section: Exit -->
             <div pt-4 border-t-1 border-t-lab-border>
               <button
                 text-lab-muted
@@ -183,7 +188,7 @@ const handleLogout = () => {
                 px-2
                 @click="handleLogout"
               >
-                Logout
+                {{ exitLabel }}
               </button>
             </div>
           </nav>
@@ -192,3 +197,9 @@ const handleLogout = () => {
     </Teleport>
   </header>
 </template>
+
+<style scoped>
+.drawer-experiment:hover .drawer-dot {
+  opacity: 0.7 !important;
+}
+</style>

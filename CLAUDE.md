@@ -77,7 +77,7 @@ No UnoCSS config or tsconfig changes needed in consumers — the package ships c
 packages/lab-nav/
 ├── src/
 │   ├── index.ts                    # Barrel export
-│   ├── types.ts                    # ExperimentId, LabUser, LocalNavItem, ExperimentConfig
+│   ├── types.ts                    # ExperimentId, LabUser, LocalNavItem, ExperimentConfig (incl. exitLabel)
 │   ├── experiments.ts              # Hardcoded experiment registry (3 experiments)
 │   ├── fonts.css                   # Google Fonts @import (Epilogue, IBM Plex Mono)
 │   └── components/
@@ -85,7 +85,7 @@ packages/lab-nav/
 │       ├── LabBar.vue              # Desktop: two-tier nav (lab bar + local nav)
 │       ├── LabBarMobile.vue        # Mobile: hamburger → slide-out drawer
 │       ├── ExperimentSwitcher.vue  # Horizontal experiment list with active indicator
-│       └── UserMenu.vue            # User name + logout dropdown
+│       └── UserMenu.vue            # User name + experiment-aware exit dropdown
 ├── tests/
 │   ├── BrandMark.spec.ts
 │   ├── experiments.spec.ts
@@ -161,7 +161,8 @@ Keyframes defined in UnoCSS preflights:
 
 | Animation | Duration | Usage |
 |-----------|----------|-------|
-| `lab-glow-pulse` | 3s infinite | Breathing glow on active experiment status dot |
+| `lab-glow-pulse` | 3s infinite | Breathing glow on active experiment status dot (staggered per-experiment via `animation-delay`) |
+| `lab-dot-arrive` | 300ms once | One-shot arrival flash — glow expands from 6px to 14px and settles back on active dot |
 | `slide-in-right` | 250ms | Mobile drawer slide-in from right |
 
 Additional transitions via Vue `<Transition>` component:

@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { ref, useTemplateRef, onMounted, onUnmounted } from "vue";
-import type { LabUser } from "../types";
+import { ref, computed, useTemplateRef, onMounted, onUnmounted } from "vue";
+import type { ExperimentId, LabUser } from "../types";
+import { experiments } from "../experiments";
 
-defineProps<{
+const { currentExperiment } = defineProps<{
   user: LabUser;
+  currentExperiment: ExperimentId;
 }>();
 
 const emit = defineEmits<{
   logout: [];
 }>();
+
+const exitLabel = computed(
+  () => experiments.find((e) => e.id === currentExperiment)?.exitLabel ?? "Logout",
+);
 
 const menuOpen = ref(false);
 const menuRef = useTemplateRef<HTMLElement>("menuRef");
@@ -91,7 +97,7 @@ onUnmounted(() => document.removeEventListener("click", handleClickOutside));
           py-2
           @click="emit('logout')"
         >
-          Logout
+          {{ exitLabel }}
         </button>
       </div>
     </Transition>

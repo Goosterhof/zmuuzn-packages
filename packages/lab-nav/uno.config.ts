@@ -22,6 +22,12 @@ export default defineConfig({
           50% { opacity: 0.5; }
         }
 
+        @keyframes lab-dot-arrive {
+          0% { box-shadow: 0 0 6px var(--dot-color); }
+          40% { box-shadow: 0 0 14px var(--dot-color); }
+          100% { box-shadow: 0 0 6px var(--dot-color); }
+        }
+
         @keyframes slide-in-right {
           from { transform: translateX(100%); }
           to { transform: translateX(0); }

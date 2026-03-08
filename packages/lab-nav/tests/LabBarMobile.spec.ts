@@ -64,19 +64,28 @@ describe("LabBarMobile", () => {
     expect(wrapper.text()).toContain("Leaderboard");
   });
 
-  it("should render user name and logout in the drawer", async () => {
+  it("should render user name and experiment-aware exit label in the drawer", async () => {
     const wrapper = mountMobile({ currentExperiment: "gatekeeper" });
     await wrapper.find('button[aria-label="Open menu"]').trigger("click");
     expect(wrapper.text()).toContain("Goos");
-    expect(wrapper.text()).toContain("Logout");
+    expect(wrapper.text()).toContain("Leave the vault");
   });
 
-  it("should emit logout when logout is clicked in drawer", async () => {
+  it("should render laboratory section headers in the drawer", async () => {
+    const wrapper = mountMobile({
+      localNav: [{ label: "Dashboard", to: "/" }],
+    });
+    await wrapper.find('button[aria-label="Open menu"]').trigger("click");
+    expect(wrapper.text()).toContain("Stations");
+    expect(wrapper.text()).toContain("Corridors");
+  });
+
+  it("should emit logout when exit button is clicked in drawer", async () => {
     const wrapper = mountMobile({ currentExperiment: "gatekeeper" });
     await wrapper.find('button[aria-label="Open menu"]').trigger("click");
     const buttons = wrapper.findAll("nav button");
-    const logoutBtn = buttons.find((b) => b.text().trim() === "Logout");
-    await logoutBtn!.trigger("click");
+    const exitBtn = buttons.find((b) => b.text().trim() === "Leave the vault");
+    await exitBtn!.trigger("click");
     expect(wrapper.emitted("logout")).toHaveLength(1);
   });
 });

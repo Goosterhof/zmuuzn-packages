@@ -92,10 +92,10 @@ describe("LabBar", () => {
     // Open user menu dropdown
     const triggerBtn = wrapper.find("button");
     await triggerBtn.trigger("click");
-    // Click logout
+    // Click exit button (experiment-aware label)
     const buttons = wrapper.findAll("button");
-    const logoutBtn = buttons.find((b) => b.text() === "Logout");
-    await logoutBtn!.trigger("click");
+    const exitBtn = buttons.find((b) => b.text() === "Leave the vault");
+    await exitBtn!.trigger("click");
     expect(wrapper.emitted("logout")).toHaveLength(1);
   });
 

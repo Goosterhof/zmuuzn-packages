@@ -5,6 +5,7 @@ export interface ExperimentConfig {
   label: string;
   url: string;
   accentColor: string;
+  exitLabel: string;
 }
 
 export interface LabUser {

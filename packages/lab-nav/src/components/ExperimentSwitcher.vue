@@ -10,12 +10,14 @@ const { currentExperiment } = defineProps<{
 const accentColor = computed(
   () => experiments.find((e) => e.id === currentExperiment)?.accentColor ?? "#F5F0E8",
 );
+
+const currentIndex = computed(() => experiments.findIndex((e) => e.id === currentExperiment));
 </script>
 
 <template>
   <nav aria-label="Experiments">
     <ul flex items-center gap-1 list-none m-0 p-0>
-      <li v-for="exp in experiments" :key="exp.id">
+      <li v-for="(exp, index) in experiments" :key="exp.id">
         <span
           v-if="exp.id === currentExperiment"
           text-lab-active
@@ -42,9 +44,10 @@ const accentColor = computed(
             rounded-full
             shrink-0
             :style="{
+              '--dot-color': accentColor,
               backgroundColor: accentColor,
               boxShadow: `0 0 6px ${accentColor}`,
-              animation: 'lab-glow-pulse 3s ease-in-out infinite',
+              animation: `lab-dot-arrive 300ms ease-out, lab-glow-pulse 3s ease-in-out ${index}s infinite`,
             }"
           />
           {{ exp.label }}
@@ -69,6 +72,7 @@ const accentColor = computed(
           flex
           items-center
           gap-2
+          class="experiment-link"
         >
           <i
             inline-block
@@ -76,7 +80,12 @@ const accentColor = computed(
             h-1.5
             rounded-full
             shrink-0
-            :style="{ backgroundColor: exp.accentColor, opacity: 0.4 }"
+            class="experiment-dot"
+            :style="{
+              backgroundColor: exp.accentColor,
+              opacity: 0.4,
+              transition: 'opacity 200ms ease',
+            }"
           />
           {{ exp.label }}
         </a>
@@ -84,3 +93,9 @@ const accentColor = computed(
     </ul>
   </nav>
 </template>
+
+<style scoped>
+.experiment-link:hover .experiment-dot {
+  opacity: 0.7 !important;
+}
+</style>
