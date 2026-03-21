@@ -50,6 +50,7 @@ describe("LabBarMobile", () => {
     expect(wrapper.text()).toContain("Gatekeeper");
     expect(wrapper.text()).toContain("War Table");
     expect(wrapper.text()).toContain("Crucible");
+    expect(wrapper.text()).toContain("Parlour");
   });
 
   it("should render local nav items in the drawer", async () => {

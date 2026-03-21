@@ -22,4 +22,11 @@ export const experiments: readonly ExperimentConfig[] = [
     accentColor: "#FC4C02",
     exitLabel: "Exit the forge",
   },
+  {
+    id: "parlour",
+    label: "Parlour",
+    url: "https://parlour.zmuuzn.nl",
+    accentColor: "#7C3AED",
+    exitLabel: "Leave the circle",
+  },
 ];

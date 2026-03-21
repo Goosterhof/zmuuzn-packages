@@ -3,12 +3,12 @@ import { mount } from "@vue/test-utils";
 import ExperimentSwitcher from "../src/components/ExperimentSwitcher.vue";
 
 describe("ExperimentSwitcher", () => {
-  it("should render all three experiments", () => {
+  it("should render all four experiments", () => {
     const wrapper = mount(ExperimentSwitcher, {
       props: { currentExperiment: "gatekeeper" },
     });
     const items = wrapper.findAll("li");
-    expect(items).toHaveLength(3);
+    expect(items).toHaveLength(4);
   });
 
   it("should render the active experiment as a span, not a link", () => {
@@ -29,13 +29,16 @@ describe("ExperimentSwitcher", () => {
       props: { currentExperiment: "gatekeeper" },
     });
     const links = wrapper.findAll("a");
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(3);
 
     const warTableLink = links.find((a) => a.text() === "War Table");
     expect(warTableLink?.attributes("href")).toBe("https://helldivers.zmuuzn.nl");
 
     const crucibleLink = links.find((a) => a.text() === "Crucible");
     expect(crucibleLink?.attributes("href")).toBe("https://strava.zmuuzn.nl");
+
+    const parlourLink = links.find((a) => a.text() === "Parlour");
+    expect(parlourLink?.attributes("href")).toBe("https://parlour.zmuuzn.nl");
   });
 
   it("should apply the experiment accent color to the active underline", () => {

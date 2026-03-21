@@ -35,6 +35,7 @@ describe("UserMenu", () => {
       { id: "gatekeeper" as const, label: "Leave the vault" },
       { id: "war-table" as const, label: "Dismiss" },
       { id: "crucible" as const, label: "Exit the forge" },
+      { id: "parlour" as const, label: "Leave the circle" },
     ];
 
     for (const exp of cases) {

@@ -37,6 +37,7 @@ describe("LabBar", () => {
     expect(wrapper.text()).toContain("War Table");
     expect(wrapper.text()).toContain("Gatekeeper");
     expect(wrapper.text()).toContain("Crucible");
+    expect(wrapper.text()).toContain("Parlour");
   });
 
   it("should render the user menu with the user name", () => {

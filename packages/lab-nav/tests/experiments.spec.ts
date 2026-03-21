@@ -2,15 +2,16 @@ import { describe, it, expect } from "vitest";
 import { experiments } from "../src/experiments";
 
 describe("experiments", () => {
-  it("should contain exactly three experiments", () => {
-    expect(experiments).toHaveLength(3);
+  it("should contain exactly four experiments", () => {
+    expect(experiments).toHaveLength(4);
   });
 
-  it("should include gatekeeper, war-table, and crucible", () => {
+  it("should include gatekeeper, war-table, crucible, and parlour", () => {
     const ids = experiments.map((e) => e.id);
     expect(ids).toContain("gatekeeper");
     expect(ids).toContain("war-table");
     expect(ids).toContain("crucible");
+    expect(ids).toContain("parlour");
   });
 
   it("should have valid URLs following the *.zmuuzn.nl pattern", () => {

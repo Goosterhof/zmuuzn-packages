@@ -78,7 +78,7 @@ packages/lab-nav/
 ├── src/
 │   ├── index.ts                    # Barrel export
 │   ├── types.ts                    # ExperimentId, LabUser, LocalNavItem, ExperimentConfig (incl. exitLabel)
-│   ├── experiments.ts              # Hardcoded experiment registry (3 experiments)
+│   ├── experiments.ts              # Hardcoded experiment registry (4 experiments)
 │   ├── fonts.css                   # Google Fonts @import (Epilogue, IBM Plex Mono)
 │   └── components/
 │       ├── BrandMark.vue           # Three-segment pill: stars | wordmark | app name
@@ -98,7 +98,7 @@ packages/lab-nav/
 ├── uno.config.ts                   # UnoCSS theme + shortcuts
 ├── tsconfig.json / tsconfig.build.json
 ├── oxlintrc.json                   # Lint rules
-└── package.json                    # Package manifest (v0.3.0)
+└── package.json                    # Package manifest (v0.4.0)
 ```
 
 ### Key Patterns
@@ -143,6 +143,7 @@ Defined in `uno.config.ts` under `theme.colors.lab` — produces UnoCSS utilitie
 | Gatekeeper | Amber | `#D97706` |
 | War Table | Gold | `#FFD100` |
 | Crucible | Strava Orange | `#FC4C02` |
+| Parlour | Violet | `#7C3AED` |
 
 ### Typography
 
@@ -204,6 +205,6 @@ npm run format -w packages/lab-nav   # oxfmt --write src/ tests/
 ## Known Limitations & Tech Debt
 
 - **Version bumping is manual**: Publish to GitHub Packages requires incrementing `version` in `package.json` — CI does not auto-bump
-- **Hardcoded experiment registry**: Adding a new experiment requires editing `src/experiments.ts` — not dynamic
+- **Hardcoded experiment registry**: Adding a new experiment requires editing `src/experiments.ts` + `src/types.ts` — not dynamic
 - **Font loading dependency**: Google Fonts loaded via CSS `@import` — `display=swap` prevents FOIT but initial render uses fallback fonts
 - **BrandMark inline styles**: Brand colors (#C8102E red, #1A1A1A black) in BrandMark use inline `:style` since they're brand-specific, not lab theme tokens

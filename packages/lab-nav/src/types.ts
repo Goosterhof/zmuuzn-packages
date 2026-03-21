@@ -1,4 +1,4 @@
-export type ExperimentId = "gatekeeper" | "war-table" | "crucible";
+export type ExperimentId = "gatekeeper" | "war-table" | "crucible" | "parlour";
 
 export interface ExperimentConfig {
   id: ExperimentId;
