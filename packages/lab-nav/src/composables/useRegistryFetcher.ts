@@ -43,6 +43,12 @@ export const useRegistryFetcher = (): {
       /* Handle both wrapped { data: [...] } and raw [...] responses */
       const list = Array.isArray(data) ? data : (data.data ?? []);
 
+      /* Empty registry means seeder hasn't run — use fallback instead of caching nothing */
+      if (list.length === 0) {
+        experiments.value = fallbackData as RegistryExperiment[];
+        return;
+      }
+
       cachedExperiments = list;
       cacheTimestamp = Date.now();
       experiments.value = list;
