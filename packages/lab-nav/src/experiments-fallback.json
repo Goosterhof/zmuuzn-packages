@@ -1,0 +1,32 @@
+[
+  {
+    "id": "gatekeeper",
+    "label": "Gatekeeper",
+    "url": "https://auth.zmuuzn.nl",
+    "accentColor": "#D97706"
+  },
+  {
+    "id": "war-table",
+    "label": "War Table",
+    "url": "https://helldivers.zmuuzn.nl",
+    "accentColor": "#FFD100"
+  },
+  {
+    "id": "crucible",
+    "label": "Crucible",
+    "url": "https://strava.zmuuzn.nl",
+    "accentColor": "#FC4C02"
+  },
+  {
+    "id": "parlour",
+    "label": "Parlour",
+    "url": "https://parlour.zmuuzn.nl",
+    "accentColor": "#7C3AED"
+  },
+  {
+    "id": "smokestacks",
+    "label": "Smokestacks",
+    "url": "https://smokestacks.zmuuzn.nl",
+    "accentColor": "#22C55E"
+  }
+]
