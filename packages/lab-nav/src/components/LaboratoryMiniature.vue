@@ -60,6 +60,7 @@ const handleDepart = (experimentId: string, url: string): void => {
 .laboratory-miniature {
   perspective: 800px;
   perspective-origin: 50% 30%;
+  overflow: hidden;
 }
 
 .miniature-floor {

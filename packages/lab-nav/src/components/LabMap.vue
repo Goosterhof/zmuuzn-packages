@@ -67,14 +67,21 @@ const handleNavigate = (url: string): void => {
 
 /* Popover positioning: track if we have space above */
 const openDirection = ref<"up" | "down">("up");
+const popoverTop = ref<string | undefined>(undefined);
 
 watch(isOpen, (open) => {
   if (!open) return;
   nextTick(() => {
     const rect = buttonRef.value?.getBoundingClientRect();
     if (!rect) return;
-    /* If less than 400px above the button, open downward */
-    openDirection.value = rect.top < 400 ? "down" : "up";
+    if (rect.top < 400) {
+      openDirection.value = "down";
+      /* Position popover below the button: button bottom + 12px gap */
+      popoverTop.value = `${String(Math.round(rect.bottom + 12))}px`;
+    } else {
+      openDirection.value = "up";
+      popoverTop.value = undefined;
+    }
   });
 });
 </script>
@@ -168,7 +175,7 @@ watch(isOpen, (open) => {
           right: resolvedPosition === 'bottom-right' ? '16px' : 'auto',
           left: resolvedPosition === 'bottom-left' ? '16px' : 'auto',
           bottom: openDirection === 'up' ? '76px' : 'auto',
-          top: openDirection === 'down' ? 'auto' : undefined,
+          top: openDirection === 'down' ? popoverTop : undefined,
         }"
         role="dialog"
         aria-label="Laboratory map"
@@ -246,6 +253,7 @@ watch(isOpen, (open) => {
   z-index: 9991;
   width: 300px;
   max-height: 360px;
+  overflow-x: hidden;
   overflow-y: auto;
   background-color: #0a0a18;
   border: 3px solid #3d3d6b;
