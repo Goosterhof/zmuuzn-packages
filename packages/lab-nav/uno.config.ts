@@ -82,9 +82,14 @@ export default defineConfig({
 		"lab-nav-link": "lab-font-mono text-sm font-400 uppercase tracking-wider no-underline transition-colors",
 		"lab-section-label": "lab-font-mono text-xs uppercase tracking-widest font-600 text-lab-muted",
 		"lab-ghost-btn": "bg-transparent border-none cursor-pointer transition-colors",
-		/* Map shortcuts */
+		/* Map shortcuts — fonts */
 		"map-font-display": "font-map-display",
 		"map-font-mono": "font-map-mono",
 		"map-focus": "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-map-gold",
+		/* Map shortcuts — typography levels */
+		"map-text-title": "font-map-display font-800 uppercase text-11px tracking-[3px]",
+		"map-text-room": "font-map-display font-700 uppercase text-11px tracking-[1.5px] leading-tight",
+		"map-text-timestamp": "font-map-mono font-500 text-9px tracking-[0.5px]",
+		"map-text-badge": "font-map-mono font-600 uppercase text-8px tracking-[1px]",
 	},
 });

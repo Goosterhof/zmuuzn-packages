@@ -44,11 +44,17 @@ const accentRgb = computed(() => {
 const computedShadow = computed(() => {
   const offset = isActive.value ? "3px 3px 0" : isHovered.value ? "1px 1px 0" : "2px 2px 0";
   const hard = `${offset} ${isActive.value ? experiment.accentColor : shadowColor.value}`;
+  const inset = computedInset.value;
 
-  if (neverVisited.value) return hard;
+  const layers = [hard];
+  if (!neverVisited.value) {
+    layers.push(
+      `0 0 ${String(ghostSpread.value)}px rgba(${accentRgb.value}, ${String(ghostOpacity.value)})`,
+    );
+  }
+  if (inset !== "none") layers.push(inset);
 
-  const ghost = `0 0 ${String(ghostSpread.value)}px rgba(${accentRgb.value}, ${String(ghostOpacity.value)})`;
-  return `${hard}, ${ghost}`;
+  return layers.join(", ");
 });
 
 const computedBorder = computed(() => {
@@ -56,36 +62,39 @@ const computedBorder = computed(() => {
   const accent = experiment.accentColor;
   const base = isActive.value ? accent : undefined;
 
-  /* Per-experiment unique border treatments */
-  if (id === "gatekeeper") {
-    return {
-      borderColor: base,
-      borderLeftWidth: "4px",
-    };
-  }
-  if (id === "war-table") {
-    return {
-      borderColor: base,
-      borderWidth: "4px",
-    };
-  }
+  /* Crucible: always-hot bottom border via border color */
   if (id === "crucible") {
-    return {
-      borderColor: base,
-      borderBottomColor: accent,
-      borderBottomWidth: "3px",
-    };
+    return { borderColor: base, borderBottomColor: accent };
   }
+  /* Smokestacks: pipe-top always visible via border color */
   if (id === "smokestacks") {
-    return {
-      borderColor: base,
-      borderTopColor: accent,
-      borderTopWidth: "4px",
-    };
+    return { borderColor: base, borderTopColor: accent };
   }
 
-  /* Parlour + default */
   return { borderColor: base };
+});
+
+/**
+ * Per-experiment visual character expressed as inset box-shadows.
+ * Uses inset shadows instead of asymmetric border widths to avoid
+ * layout geometry shifts in the grid (VA-004/VA-005).
+ */
+const computedInset = computed(() => {
+  const id = experiment.id;
+  const accent = experiment.accentColor;
+  const border = "#2E2E52";
+  const color = isActive.value ? accent : border;
+
+  /* Gatekeeper: reinforced left edge — vault door hinge */
+  if (id === "gatekeeper") return `inset 2px 0 0 ${color}`;
+  /* War Room: double-thick on all sides — military fortification */
+  if (id === "war-table") return `inset 0 0 0 2px ${color}`;
+  /* Crucible: hot floor glow beneath */
+  if (id === "crucible") return `inset 0 -1px 0 ${accent}`;
+  /* Smokestacks: pipe emerging from roof */
+  if (id === "smokestacks") return `inset 0 2px 0 ${isActive.value ? accent : border}`;
+
+  return "none";
 });
 
 const computedRadius = computed(() => (experiment.id === "parlour" ? "8px" : "0px"));
@@ -120,26 +129,21 @@ const handleClick = (event: MouseEvent): void => {
     @mouseenter="isHovered = true"
     @mouseleave="isHovered = false"
   >
-    <span
-      class="map-font-display block font-700 uppercase leading-tight"
-      :class="neverVisited ? 'text-map-text-dim' : 'text-map-text'"
-      style="font-size: 11px; letter-spacing: 1.5px"
-    >
+    <span class="map-text-room block" :class="neverVisited ? 'text-map-text-dim' : 'text-map-text'">
       {{ experiment.label }}
     </span>
 
     <span
       v-if="isActive"
-      class="map-font-mono block font-600 uppercase mt-4px"
-      :style="{ color: experiment.accentColor, fontSize: '8px', letterSpacing: '1px' }"
+      class="map-text-badge block mt-4px"
+      :style="{ color: experiment.accentColor }"
     >
       &#9679; YOU ARE HERE
     </span>
     <span
       v-else
-      class="map-font-mono block font-500 mt-4px"
+      class="map-text-timestamp block mt-4px"
       :class="neverVisited ? 'text-map-text-dim' : 'text-map-text-muted'"
-      style="font-size: 9px; letter-spacing: 0.5px"
     >
       {{ lastVisited }}
     </span>
@@ -148,6 +152,10 @@ const handleClick = (event: MouseEvent): void => {
 
 <style scoped>
 .room-tile {
+  /* Token aliases — single source for values used in pseudo-selectors */
+  --room-bg-elevated: #252545;
+  --room-border-strong: #3d3d6b;
+
   transition-property: transform, opacity, filter, background-color, border-color, box-shadow;
   transition-duration: 120ms;
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -156,8 +164,8 @@ const handleClick = (event: MouseEvent): void => {
 .room-tile:hover:not(.room-tile--departing):not(.room-tile--sibling-fade):not(
     [aria-current="page"]
   ) {
-  background-color: #252545;
-  border-color: #3d3d6b;
+  background-color: var(--room-bg-elevated);
+  border-color: var(--room-border-strong);
   transform: translate(1px, 1px);
 }
 

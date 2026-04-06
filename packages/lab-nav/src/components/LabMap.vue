@@ -184,12 +184,7 @@ watch(isOpen, (open) => {
         aria-label="Laboratory map"
       >
         <!-- Header -->
-        <div
-          class="map-font-display font-800 uppercase text-map-text-muted pb-8px"
-          style="font-size: 11px; letter-spacing: 3px"
-        >
-          THE LABORATORY
-        </div>
+        <div class="map-text-title text-map-text-muted pb-8px">THE LABORATORY</div>
 
         <!-- Loading state -->
         <div
@@ -214,6 +209,15 @@ watch(isOpen, (open) => {
 
 <style scoped>
 .map-button {
+  /* Token aliases — single source for values used across pseudo-selectors */
+  --btn-void: #0a0a18;
+  --btn-surface: #1a1a2e;
+  --btn-elevated: #252545;
+  --btn-border: #3d3d6b;
+  --btn-gold: #f0d040;
+  --btn-muted: #9e9ebf;
+  --btn-text: #f5f0e8;
+
   position: fixed;
   z-index: 9990;
   width: 48px;
@@ -221,13 +225,13 @@ watch(isOpen, (open) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0a0a18;
-  border: 3px solid #3d3d6b;
+  background-color: var(--btn-void);
+  border: 3px solid var(--btn-border);
   border-radius: 0;
   cursor: pointer;
   transition: all 120ms cubic-bezier(0.25, 0.1, 0.25, 1);
-  box-shadow: 3px 3px 0 #f0d040;
-  color: #9e9ebf;
+  box-shadow: 3px 3px 0 var(--btn-gold);
+  color: var(--btn-muted);
 }
 
 .map-button:not(.map-button--open) {
@@ -235,24 +239,24 @@ watch(isOpen, (open) => {
 }
 
 .map-button:hover {
-  background-color: #1a1a2e;
-  border-color: #f0d040;
-  box-shadow: 2px 2px 0 #f0d040;
+  background-color: var(--btn-surface);
+  border-color: var(--btn-gold);
+  box-shadow: 2px 2px 0 var(--btn-gold);
   transform: translate(1px, 1px);
 }
 
 .map-button:active {
-  background-color: #252545;
-  box-shadow: 0 0 0 #f0d040;
+  background-color: var(--btn-elevated);
+  box-shadow: 0 0 0 var(--btn-gold);
   transform: translate(3px, 3px);
 }
 
 .map-button--open {
-  background-color: #252545;
-  border-color: #f0d040;
-  box-shadow: 2px 2px 0 #f0d040;
+  background-color: var(--btn-elevated);
+  border-color: var(--btn-gold);
+  box-shadow: 2px 2px 0 var(--btn-gold);
   transform: translate(1px, 1px);
-  color: #f5f0e8;
+  color: var(--btn-text);
 }
 
 .map-popover {
@@ -260,7 +264,7 @@ watch(isOpen, (open) => {
   z-index: 9991;
   width: 300px;
   max-height: min(360px, calc(100vh - 80px));
-  overflow-x: hidden;
+  overflow-x: clip;
   overflow-y: auto;
   background-color: #0a0a18;
   border: 3px solid #3d3d6b;
