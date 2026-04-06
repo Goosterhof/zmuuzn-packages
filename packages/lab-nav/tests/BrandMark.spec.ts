@@ -24,14 +24,14 @@ describe("BrandMark", () => {
   it("should hide the app name segment when currentExperiment is not provided", () => {
     const wrapper = mount(BrandMark);
     expect(wrapper.text()).not.toContain("Gatekeeper");
-    expect(wrapper.text()).not.toContain("War Table");
+    expect(wrapper.text()).not.toContain("War Room");
     expect(wrapper.text()).not.toContain("Crucible");
   });
 
   it("should render the correct label for each experiment", () => {
     const experiments = [
       { id: "gatekeeper" as const, label: "Gatekeeper" },
-      { id: "war-table" as const, label: "War Table" },
+      { id: "war-table" as const, label: "War Room" },
       { id: "crucible" as const, label: "Crucible" },
     ];
 

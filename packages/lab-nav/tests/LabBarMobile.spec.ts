@@ -48,7 +48,7 @@ describe("LabBarMobile", () => {
     const wrapper = mountMobile();
     await wrapper.find('button[aria-label="Open menu"]').trigger("click");
     expect(wrapper.text()).toContain("Gatekeeper");
-    expect(wrapper.text()).toContain("War Table");
+    expect(wrapper.text()).toContain("War Room");
     expect(wrapper.text()).toContain("Crucible");
     expect(wrapper.text()).toContain("Parlour");
   });

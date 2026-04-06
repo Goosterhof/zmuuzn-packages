@@ -34,7 +34,7 @@ describe("LabBar", () => {
       },
       global: { plugins: [createTestRouter()] },
     });
-    expect(wrapper.text()).toContain("War Table");
+    expect(wrapper.text()).toContain("War Room");
     expect(wrapper.text()).toContain("Gatekeeper");
     expect(wrapper.text()).toContain("Crucible");
     expect(wrapper.text()).toContain("Parlour");

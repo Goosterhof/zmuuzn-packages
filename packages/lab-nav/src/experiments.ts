@@ -10,7 +10,7 @@ export const experiments: readonly ExperimentConfig[] = [
   },
   {
     id: "war-table",
-    label: "War Table",
+    label: "War Room",
     url: "https://helldivers.zmuuzn.nl",
     accentColor: "#FFD100",
     exitLabel: "Dismiss",

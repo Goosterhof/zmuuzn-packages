@@ -16,11 +16,11 @@ describe("ExperimentSwitcher", () => {
       props: { currentExperiment: "war-table" },
     });
     const spans = wrapper.findAll("span");
-    const activeSpan = spans.find((s) => s.text() === "War Table");
+    const activeSpan = spans.find((s) => s.text() === "War Room");
     expect(activeSpan).toBeDefined();
 
     const links = wrapper.findAll("a");
-    const activeLink = links.find((a) => a.text() === "War Table");
+    const activeLink = links.find((a) => a.text() === "War Room");
     expect(activeLink).toBeUndefined();
   });
 
@@ -31,7 +31,7 @@ describe("ExperimentSwitcher", () => {
     const links = wrapper.findAll("a");
     expect(links).toHaveLength(3);
 
-    const warTableLink = links.find((a) => a.text() === "War Table");
+    const warTableLink = links.find((a) => a.text() === "War Room");
     expect(warTableLink?.attributes("href")).toBe("https://helldivers.zmuuzn.nl");
 
     const crucibleLink = links.find((a) => a.text() === "Crucible");
