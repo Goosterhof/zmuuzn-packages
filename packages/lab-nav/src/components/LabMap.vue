@@ -66,6 +66,9 @@ const handleNavigate = (url: string): void => {
 };
 
 /* Popover positioning: track if we have space above */
+const POPOVER_HEIGHT_ESTIMATE = 280; /* 5 rooms + header + padding */
+const POPOVER_GAP = 12;
+
 const openDirection = ref<"up" | "down">("up");
 const popoverTop = ref<string | undefined>(undefined);
 
@@ -74,10 +77,10 @@ watch(isOpen, (open) => {
   nextTick(() => {
     const rect = buttonRef.value?.getBoundingClientRect();
     if (!rect) return;
-    if (rect.top < 400) {
+    if (rect.top < POPOVER_HEIGHT_ESTIMATE + POPOVER_GAP) {
       openDirection.value = "down";
-      /* Position popover below the button: button bottom + 12px gap */
-      popoverTop.value = `${String(Math.round(rect.bottom + 12))}px`;
+      /* Position popover below the button: button bottom + gap */
+      popoverTop.value = `${String(Math.round(rect.bottom + POPOVER_GAP))}px`;
     } else {
       openDirection.value = "up";
       popoverTop.value = undefined;
@@ -112,13 +115,13 @@ watch(isOpen, (open) => {
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        <!-- Cardinal lines (muted) -->
+        <!-- Cardinal lines (inherit color from button state) -->
         <line
           x1="12"
           y1="2"
           x2="12"
           y2="10"
-          stroke="#9E9EBF"
+          stroke="currentColor"
           stroke-width="1.5"
           stroke-linecap="round"
         />
@@ -127,7 +130,7 @@ watch(isOpen, (open) => {
           y1="14"
           x2="12"
           y2="22"
-          stroke="#9E9EBF"
+          stroke="currentColor"
           stroke-width="1.5"
           stroke-linecap="round"
         />
@@ -136,7 +139,7 @@ watch(isOpen, (open) => {
           y1="12"
           x2="10"
           y2="12"
-          stroke="#9E9EBF"
+          stroke="currentColor"
           stroke-width="1.5"
           stroke-linecap="round"
         />
@@ -145,7 +148,7 @@ watch(isOpen, (open) => {
           y1="12"
           x2="22"
           y2="12"
-          stroke="#9E9EBF"
+          stroke="currentColor"
           stroke-width="1.5"
           stroke-linecap="round"
         />
@@ -224,6 +227,10 @@ watch(isOpen, (open) => {
   cursor: pointer;
   transition: all 120ms cubic-bezier(0.25, 0.1, 0.25, 1);
   box-shadow: 3px 3px 0 #f0d040;
+  color: #9e9ebf;
+}
+
+.map-button:not(.map-button--open) {
   animation: map-button-breathe 3s ease-in-out infinite;
 }
 
@@ -245,39 +252,52 @@ watch(isOpen, (open) => {
   border-color: #f0d040;
   box-shadow: 2px 2px 0 #f0d040;
   transform: translate(1px, 1px);
-  animation: none;
+  color: #f5f0e8;
 }
 
 .map-popover {
   position: fixed;
   z-index: 9991;
   width: 300px;
-  max-height: 360px;
+  max-height: min(360px, calc(100vh - 80px));
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #0a0a18;
   border: 3px solid #3d3d6b;
   border-radius: 0;
   padding: 12px;
-  box-shadow: 6px 6px 0 #0a0a18;
+  box-shadow: 6px 6px 0 #050510;
 
-  /* Entrance animation */
-  animation: map-popover-enter 200ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  /* Entrance animation — direction set by modifier class */
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation-fill-mode: both;
 }
 
 .map-popover--up {
-  /* Positioned via inline style */
+  animation-name: map-popover-enter-up;
 }
 
 .map-popover--down {
-  /* When opening downward, position from button top */
+  animation-name: map-popover-enter-down;
   bottom: auto;
 }
 
-@keyframes map-popover-enter {
+@keyframes map-popover-enter-up {
   from {
     opacity: 0;
     transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes map-popover-enter-down {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
   }
   to {
     opacity: 1;

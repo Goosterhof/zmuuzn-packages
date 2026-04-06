@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { type ExperimentId, type RegistryExperiment, EXPERIMENT_SHADOW_COLORS } from "../types";
 
 const { experiment, current, lastVisited, visitCount, departing, siblingFade } = defineProps<{
@@ -15,6 +15,7 @@ const emit = defineEmits<{
   depart: [url: string];
 }>();
 
+const isHovered = ref(false);
 const isActive = computed(() => experiment.id === current);
 
 const ghostIntensity = computed(() => Math.min(visitCount / 20, 1.0));
@@ -41,7 +42,7 @@ const accentRgb = computed(() => {
 });
 
 const computedShadow = computed(() => {
-  const offset = isActive.value ? "3px 3px 0" : "2px 2px 0";
+  const offset = isActive.value ? "3px 3px 0" : isHovered.value ? "1px 1px 0" : "2px 2px 0";
   const hard = `${offset} ${isActive.value ? experiment.accentColor : shadowColor.value}`;
 
   if (neverVisited.value) return hard;
@@ -113,7 +114,11 @@ const handleClick = (event: MouseEvent): void => {
       borderRadius: computedRadius,
     }"
     :aria-current="isActive ? 'page' : undefined"
+    :aria-disabled="isActive ? 'true' : undefined"
+    :tabindex="isActive ? -1 : undefined"
     @click="handleClick"
+    @mouseenter="isHovered = true"
+    @mouseleave="isHovered = false"
   >
     <span
       class="map-font-display block font-700 uppercase leading-tight"
@@ -173,6 +178,10 @@ const handleClick = (event: MouseEvent): void => {
 
 .room-tile--frequent {
   animation: map-ghost-breathe 4s ease-in-out infinite;
+}
+
+.room-tile[aria-current="page"] {
+  cursor: default;
 }
 
 .room-tile--dormant {

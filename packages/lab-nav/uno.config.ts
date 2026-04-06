@@ -33,7 +33,7 @@ export default defineConfig({
 		},
 		boxShadow: {
 			"map-button": "3px 3px 0 #F0D040",
-			"map-popover": "6px 6px 0 #0A0A18",
+			"map-popover": "6px 6px 0 #050510",
 		},
 	},
 	preflights: [
