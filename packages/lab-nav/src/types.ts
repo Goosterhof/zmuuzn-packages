@@ -1,4 +1,10 @@
-export type ExperimentId = "gatekeeper" | "war-table" | "crucible" | "parlour" | "smokestacks";
+export type ExperimentId =
+  | "gatekeeper"
+  | "war-table"
+  | "crucible"
+  | "parlour"
+  | "smokestacks"
+  | "horadrim";
 
 export interface RegistryExperiment {
   id: ExperimentId;
@@ -23,6 +29,7 @@ export const EXPERIMENT_SHADOW_COLORS: Record<ExperimentId, string> = {
   crucible: "#7E2601",
   parlour: "#4A2290",
   smokestacks: "#15803D",
+  horadrim: "#5C0000",
 };
 
 /* --- Legacy exports (kept for backward compatibility until consumers migrate) --- */
