@@ -1,66 +1,62 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import type { ExperimentId, LabUser, LocalNavItem } from "../types";
-import { experiments } from "../experiments";
-import BrandMark from "./BrandMark.vue";
-import ExperimentSwitcher from "./ExperimentSwitcher.vue";
-import UserMenu from "./UserMenu.vue";
+import {computed} from 'vue';
+import type {ExperimentId, LabUser, LocalNavItem} from '../types';
+import {experiments} from '../experiments';
+import BrandMark from './BrandMark.vue';
+import ExperimentSwitcher from './ExperimentSwitcher.vue';
+import UserMenu from './UserMenu.vue';
 
-const { currentExperiment, localNav } = defineProps<{
-  currentExperiment: ExperimentId;
-  user: LabUser;
-  localNav: LocalNavItem[];
+const {currentExperiment, localNav} = defineProps<{
+    currentExperiment: ExperimentId;
+    user: LabUser;
+    localNav: LocalNavItem[];
 }>();
 
-const emit = defineEmits<{
-  logout: [];
-}>();
+const emit = defineEmits<{logout: []}>();
 
-const accentColor = computed(
-  () => experiments.find((e) => e.id === currentExperiment)?.accentColor ?? "#F5F0E8",
-);
+const accentColor = computed(() => experiments.find((e) => e.id === currentExperiment)?.accentColor ?? '#F5F0E8');
 </script>
 
 <template>
-  <header hidden md:block>
-    <!-- Row 1: Laboratory Bar -->
-    <div flex items-center justify-between px-6 py-3 bg-lab-bg border-b-1 border-b-lab-border>
-      <BrandMark size="sm" :current-experiment="currentExperiment" />
+    <header hidden md:block>
+        <!-- Row 1: Laboratory Bar -->
+        <div flex items-center justify-between px-6 py-3 bg-lab-bg border-b-1 border-b-lab-border>
+            <BrandMark size="sm" :current-experiment="currentExperiment" />
 
-      <ExperimentSwitcher :current-experiment="currentExperiment" />
+            <ExperimentSwitcher :current-experiment="currentExperiment" />
 
-      <UserMenu :user="user" :current-experiment="currentExperiment" @logout="emit('logout')" />
-    </div>
+            <UserMenu :user="user" :current-experiment="currentExperiment" @logout="emit('logout')" />
+        </div>
 
-    <!-- Row 2: Local Navigation -->
-    <div
-      v-if="localNav.length > 0"
-      flex
-      items-center
-      gap-6
-      px-6
-      py-2.5
-      bg-lab-bg
-      border-b-1
-      :style="{ borderBottomColor: '#2E2E52', boxShadow: `0 1px 6px ${accentColor}22` }"
-    >
-      <router-link
-        v-for="item in localNav"
-        :key="item.to"
-        :to="item.to"
-        lab-nav-link
-        lab-focus
-        pb-1
-        :class="item.isActive ? 'font-500' : ''"
-        :style="{
-          color: item.isActive ? '#F5F0E8' : '#9E9EBF',
-          borderBottom: item.isActive ? `2px solid ${accentColor}` : '2px solid transparent',
-        }"
-      >
-        {{ item.label }}
-      </router-link>
+        <!-- Row 2: Local Navigation -->
+        <div
+            v-if="localNav.length > 0"
+            flex
+            items-center
+            gap-6
+            px-6
+            py-2.5
+            bg-lab-bg
+            border-b-1
+            :style="{borderBottomColor: '#2E2E52', boxShadow: `0 1px 6px ${accentColor}22`}"
+        >
+            <router-link
+                v-for="item in localNav"
+                :key="item.to"
+                :to="item.to"
+                lab-nav-link
+                lab-focus
+                pb-1
+                :class="item.isActive ? 'font-500' : ''"
+                :style="{
+                    color: item.isActive ? '#F5F0E8' : '#9E9EBF',
+                    borderBottom: item.isActive ? `2px solid ${accentColor}` : '2px solid transparent',
+                }"
+            >
+                {{ item.label }}
+            </router-link>
 
-      <slot name="local-nav-end" />
-    </div>
-  </header>
+            <slot name="local-nav-end" />
+        </div>
+    </header>
 </template>
