@@ -1,40 +1,41 @@
-import { describe, it, expect } from "vitest";
-import { experiments } from "../src/experiments";
+import {describe, it, expect} from 'vitest';
 
-describe("experiments", () => {
-  it("should contain exactly four experiments", () => {
-    expect(experiments).toHaveLength(4);
-  });
+import {experiments} from '../src/experiments';
 
-  it("should include gatekeeper, war-table, crucible, and parlour", () => {
-    const ids = experiments.map((e) => e.id);
-    expect(ids).toContain("gatekeeper");
-    expect(ids).toContain("war-table");
-    expect(ids).toContain("crucible");
-    expect(ids).toContain("parlour");
-  });
+describe('experiments', () => {
+    it('should contain exactly four experiments', () => {
+        expect(experiments).toHaveLength(4);
+    });
 
-  it("should have valid URLs following the *.zmuuzn.nl pattern", () => {
-    for (const exp of experiments) {
-      expect(exp.url).toMatch(/^https:\/\/[a-z]+\.zmuuzn\.nl$/);
-    }
-  });
+    it('should include gatekeeper, war-table, crucible, and parlour', () => {
+        const ids = experiments.map((e) => e.id);
+        expect(ids).toContain('gatekeeper');
+        expect(ids).toContain('war-table');
+        expect(ids).toContain('crucible');
+        expect(ids).toContain('parlour');
+    });
 
-  it("should have valid hex accent colors", () => {
-    for (const exp of experiments) {
-      expect(exp.accentColor).toMatch(/^#[0-9A-F]{6}$/i);
-    }
-  });
+    it('should have valid URLs following the *.zmuuzn.nl pattern', () => {
+        for (const exp of experiments) {
+            expect(exp.url).toMatch(/^https:\/\/[a-z]+\.zmuuzn\.nl$/);
+        }
+    });
 
-  it("should have non-empty labels", () => {
-    for (const exp of experiments) {
-      expect(exp.label.length).toBeGreaterThan(0);
-    }
-  });
+    it('should have valid hex accent colors', () => {
+        for (const exp of experiments) {
+            expect(exp.accentColor).toMatch(/^#[0-9A-F]{6}$/i);
+        }
+    });
 
-  it("should have non-empty exit labels for experiment-aware logout", () => {
-    for (const exp of experiments) {
-      expect(exp.exitLabel.length).toBeGreaterThan(0);
-    }
-  });
+    it('should have non-empty labels', () => {
+        for (const exp of experiments) {
+            expect(exp.label.length).toBeGreaterThan(0);
+        }
+    });
+
+    it('should have non-empty exit labels for experiment-aware logout', () => {
+        for (const exp of experiments) {
+            expect(exp.exitLabel.length).toBeGreaterThan(0);
+        }
+    });
 });

@@ -1,52 +1,45 @@
-import { describe, it, expect } from "vitest";
-import { mount } from "@vue/test-utils";
-import ExperimentSwitcher from "../src/components/ExperimentSwitcher.vue";
+import {mount} from '@vue/test-utils';
+import {describe, it, expect} from 'vitest';
 
-describe("ExperimentSwitcher", () => {
-  it("should render all four experiments", () => {
-    const wrapper = mount(ExperimentSwitcher, {
-      props: { currentExperiment: "gatekeeper" },
+import ExperimentSwitcher from '../src/components/ExperimentSwitcher.vue';
+
+describe('ExperimentSwitcher', () => {
+    it('should render all four experiments', () => {
+        const wrapper = mount(ExperimentSwitcher, {props: {currentExperiment: 'gatekeeper'}});
+        const items = wrapper.findAll('li');
+        expect(items).toHaveLength(4);
     });
-    const items = wrapper.findAll("li");
-    expect(items).toHaveLength(4);
-  });
 
-  it("should render the active experiment as a span, not a link", () => {
-    const wrapper = mount(ExperimentSwitcher, {
-      props: { currentExperiment: "war-table" },
+    it('should render the active experiment as a span, not a link', () => {
+        const wrapper = mount(ExperimentSwitcher, {props: {currentExperiment: 'war-table'}});
+        const spans = wrapper.findAll('span');
+        const activeSpan = spans.find((s) => s.text() === 'War Room');
+        expect(activeSpan).toBeDefined();
+
+        const links = wrapper.findAll('a');
+        const activeLink = links.find((a) => a.text() === 'War Room');
+        expect(activeLink).toBeUndefined();
     });
-    const spans = wrapper.findAll("span");
-    const activeSpan = spans.find((s) => s.text() === "War Room");
-    expect(activeSpan).toBeDefined();
 
-    const links = wrapper.findAll("a");
-    const activeLink = links.find((a) => a.text() === "War Room");
-    expect(activeLink).toBeUndefined();
-  });
+    it('should render inactive experiments as links with correct URLs', () => {
+        const wrapper = mount(ExperimentSwitcher, {props: {currentExperiment: 'gatekeeper'}});
+        const links = wrapper.findAll('a');
+        expect(links).toHaveLength(3);
 
-  it("should render inactive experiments as links with correct URLs", () => {
-    const wrapper = mount(ExperimentSwitcher, {
-      props: { currentExperiment: "gatekeeper" },
+        const warTableLink = links.find((a) => a.text() === 'War Room');
+        expect(warTableLink?.attributes('href')).toBe('https://helldivers.zmuuzn.nl');
+
+        const crucibleLink = links.find((a) => a.text() === 'Crucible');
+        expect(crucibleLink?.attributes('href')).toBe('https://strava.zmuuzn.nl');
+
+        const parlourLink = links.find((a) => a.text() === 'Parlour');
+        expect(parlourLink?.attributes('href')).toBe('https://parlour.zmuuzn.nl');
     });
-    const links = wrapper.findAll("a");
-    expect(links).toHaveLength(3);
 
-    const warTableLink = links.find((a) => a.text() === "War Room");
-    expect(warTableLink?.attributes("href")).toBe("https://helldivers.zmuuzn.nl");
-
-    const crucibleLink = links.find((a) => a.text() === "Crucible");
-    expect(crucibleLink?.attributes("href")).toBe("https://strava.zmuuzn.nl");
-
-    const parlourLink = links.find((a) => a.text() === "Parlour");
-    expect(parlourLink?.attributes("href")).toBe("https://parlour.zmuuzn.nl");
-  });
-
-  it("should apply the experiment accent color to the active underline", () => {
-    const wrapper = mount(ExperimentSwitcher, {
-      props: { currentExperiment: "gatekeeper" },
+    it('should apply the experiment accent color to the active underline', () => {
+        const wrapper = mount(ExperimentSwitcher, {props: {currentExperiment: 'gatekeeper'}});
+        const activeSpan = wrapper.findAll('span').find((s) => s.text() === 'Gatekeeper');
+        const style = activeSpan?.attributes('style') ?? '';
+        expect(style).toContain('#D97706');
     });
-    const activeSpan = wrapper.findAll("span").find((s) => s.text() === "Gatekeeper");
-    const style = activeSpan?.attributes("style") ?? "";
-    expect(style).toContain("#D97706");
-  });
 });
