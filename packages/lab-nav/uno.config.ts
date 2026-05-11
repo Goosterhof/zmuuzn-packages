@@ -1,7 +1,7 @@
-import { defineConfig, presetUno, presetAttributify } from "unocss";
+import { defineConfig, presetWind3, presetAttributify } from "unocss";
 
 export default defineConfig({
-	presets: [presetUno(), presetAttributify()],
+	presets: [presetWind3(), presetAttributify()],
 	theme: {
 		colors: {
 			/* Legacy lab-* tokens (kept for old components during migration) */
