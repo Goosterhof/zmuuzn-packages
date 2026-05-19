@@ -78,14 +78,20 @@ packages/lab-nav/
 ├── src/
 │   ├── index.ts                    # Barrel export
 │   ├── types.ts                    # ExperimentId, LabUser, LocalNavItem, ExperimentConfig (incl. exitLabel)
-│   ├── experiments.ts              # Hardcoded experiment registry (4 experiments)
+│   ├── experiments.ts              # Experiment registry (6 experiments) — union-synchronized
 │   ├── fonts.css                   # Google Fonts @import (Epilogue, IBM Plex Mono)
-│   └── components/
-│       ├── BrandMark.vue           # Three-segment pill: stars | wordmark | app name
-│       ├── LabBar.vue              # Desktop: two-tier nav (lab bar + local nav)
-│       ├── LabBarMobile.vue        # Mobile: hamburger → slide-out drawer
-│       ├── ExperimentSwitcher.vue  # Horizontal experiment list with active indicator
-│       └── UserMenu.vue            # User name + experiment-aware exit dropdown
+│   ├── components/
+│   │   ├── LabMap.vue              # Compass-rose button + popover housing the laboratory miniature
+│   │   ├── LaboratoryMiniature.vue # Perspective-tilted floor plan with visit-history ghost glows
+│   │   ├── RoomTile.vue            # Per-experiment tile: accent shadows, YOU ARE HERE badge, departure animation
+│   │   ├── BrandMark.vue           # Three-segment pill: stars | wordmark | app name
+│   │   ├── LabBar.vue              # Desktop: two-tier nav (lab bar + local nav)
+│   │   ├── LabBarMobile.vue        # Mobile: hamburger → slide-out drawer
+│   │   ├── ExperimentSwitcher.vue  # Horizontal experiment list with active indicator
+│   │   └── UserMenu.vue            # User name + experiment-aware exit dropdown
+│   └── composables/
+│       ├── useRegistryFetcher.ts   # Courier to auth.zmuuzn.nl/api/experiments; TS-derived offline fallback
+│       └── useVisitHistory.ts      # localStorage footprint ledger — records, reads, formats visit timestamps
 ├── tests/
 │   ├── BrandMark.spec.ts
 │   ├── experiments.spec.ts
@@ -98,7 +104,7 @@ packages/lab-nav/
 ├── uno.config.ts                   # UnoCSS theme + shortcuts
 ├── tsconfig.json / tsconfig.build.json
 ├── oxlintrc.json                   # Lint rules
-└── package.json                    # Package manifest (v0.4.0)
+└── package.json                    # Package manifest (v1.2.0)
 ```
 
 ### Key Patterns
@@ -110,6 +116,97 @@ packages/lab-nav/
 - **`vue` and `vue-router`** are `peerDependencies` to avoid duplicate instances
 - **Active state detection**: Experiments use `currentExperiment` prop; local nav uses `isActive` on `LocalNavItem`
 - **Accent colors**: Derived automatically from the experiment registry based on `currentExperiment`
+
+## The LabMap v1.0.0 Surface
+
+The headline export of the v1.0.0 release. A persistent compass-rose button anchored to the corner of every experiment — press it and the laboratory floor plan rises from the void: six room tiles, each one breathing with visit-history ghost glows, the active room stamped with a **YOU ARE HERE** badge in its accent color. The surface is self-contained and requires nothing from the consumer except a `current` prop.
+
+### `<LabMap>`
+
+The orchestrator. Renders the compass-rose button and owns the popover lifecycle — open/close, escape-key dismiss, click-outside dismiss, direction detection (opens up unless the button is too close to the top edge, where it inverts to down). Fires `useRegistryFetcher` on first open; shows `"Mapping the laboratory..."` while the registry resolves.
+
+| Prop | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `current` | `ExperimentId` | Yes | — | The experiment the consumer is running in — determines the YOU ARE HERE badge |
+| `position` | `'bottom-right' \| 'bottom-left'` | No | `'bottom-right'` | Corner anchor for the button and popover |
+
+The button is `position: fixed` at `z-index: 9990` — it floats above the experiment's own layout. The popover teleports to `<body>` at `z-index: 9991`.
+
+### `<LaboratoryMiniature>`
+
+The floor plan itself. Renders the six room tiles in a 3-column CSS grid with `perspective: 800px` and an 8-degree `rotateX` tilt — the laboratory seen from a high angle, like looking down at a lit diorama. Manages the departure animation state: when a tile is clicked, its sibling tiles fade to 15% opacity and blur while the departing tile scales up and brightens before navigation fires.
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `experiments` | `RegistryExperiment[]` | Yes | The registry list — passed in from LabMap after the registry fetch resolves |
+| `current` | `ExperimentId` | Yes | Active experiment — forwarded to each RoomTile |
+| `visible` | `boolean` | Yes | Controls per-tile entrance animation stagger (30ms per tile, zeroed when hidden) |
+
+Emits `navigate(url: string)` — LabMap catches it and sets `globalThis.location.href`.
+
+`prefers-reduced-motion` strips the perspective tilt and all transitions globally.
+
+### `<RoomTile>`
+
+The per-experiment surface. Each tile knows its own accent color, shadow color (from `EXPERIMENT_SHADOW_COLORS` — a darkened accent for the hard offset shadow underneath), visit history, and per-experiment visual character expressed as inset box-shadows:
+
+| Experiment | Signature detail |
+|------------|-----------------|
+| Gatekeeper | Reinforced left edge — the vault door hinge |
+| War Table | Double-thick inset on all sides — military fortification |
+| Crucible | Hot-floor bottom glow — the forge floor |
+| Smokestacks | Pipe emerging from the roof — `borderTopColor` always lit |
+| Parlour | Rounded corners (`8px`) — the only room with soft edges |
+| Horadrim | No inset signature — the codex speaks through crimson alone |
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `experiment` | `RegistryExperiment` | Yes | The experiment this tile represents |
+| `current` | `ExperimentId` | Yes | Determines the YOU ARE HERE badge and accent-colored hard shadow |
+| `lastVisited` | `string` | Yes | Human-readable timestamp from `useVisitHistory` (e.g. "3 hours ago") |
+| `visitCount` | `number` | Yes | Raw count — drives the ghost glow intensity (saturates at 20 visits) |
+| `departing` | `boolean` | Yes | True while the navigation departure animation is running |
+| `siblingFade` | `boolean` | Yes | True on all non-departing tiles when a sibling is departing |
+
+### `useRegistryFetcher`
+
+The courier between the LabMap and the Gatekeeper's live registry. Fetches `https://auth.zmuuzn.nl/api/experiments` on first open, caches the result in module scope for 5 minutes (shared across all LabMap instances on the same page), and falls back to the bundled snapshot derived from `experiments.ts` when the endpoint is unreachable or returns an empty list.
+
+```ts
+import { useRegistryFetcher } from "@goosterhof/lab-nav"; // internal — not a public export
+
+const { experiments, loading, error, fetch } = useRegistryFetcher();
+```
+
+Returns:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `experiments` | `Ref<RegistryExperiment[]>` | The registry list — empty until `fetch()` resolves |
+| `loading` | `Ref<boolean>` | True during the in-flight request |
+| `error` | `Ref<string \| null>` | Last error message if the fetch failed; null on success |
+| `fetch` | `() => Promise<void>` | Trigger the fetch (no-ops on cache hit) |
+
+The fallback is structurally derived from the TypeScript registry — not a parallel JSON file. If the live registry goes dark, consumers see the bundled snapshot. The snapshot is never stale relative to the type system.
+
+### `useVisitHistory`
+
+The localStorage footprint ledger. Records every experiment visit by `ExperimentId` under `lab-nav-visits`, reads back human-readable timestamps, and surfaces visit counts that drive the ghost glow intensity on `RoomTile`.
+
+```ts
+import { useVisitHistory } from "@goosterhof/lab-nav"; // internal — not a public export
+
+const { recordVisit, getLastVisited, getVisitCount } = useVisitHistory();
+```
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `recordVisit` | `(id: ExperimentId) => void` | Increments count + timestamps the visit; called by LabMap on mount |
+| `getLastVisited` | `(id: ExperimentId) => string` | Returns a relative time string ("3 hours ago", "Not yet visited") |
+| `getVisitCount` | `(id: ExperimentId) => number` | Raw visit count — 0 for unvisited experiments |
+
+localStorage failures (full storage, unavailable in SSR contexts) degrade silently — the ledger returns zero counts and "Not yet visited" strings rather than throwing.
+
 
 ## Design Tokens
 
@@ -144,6 +241,8 @@ Defined in `uno.config.ts` under `theme.colors.lab` — produces UnoCSS utilitie
 | War Table | Gold | `#FFD100` |
 | Crucible | Strava Orange | `#FC4C02` |
 | Parlour | Violet | `#7C3AED` |
+| Smokestacks | Green | `#22C55E` |
+| Horadrim | Crimson | `#C8102E` |
 
 ### Typography
 
@@ -205,6 +304,6 @@ npm run format -w packages/lab-nav   # oxfmt --write src/ tests/
 ## Known Limitations & Tech Debt
 
 - **Version bumping is manual**: Publish to GitHub Packages requires incrementing `version` in `package.json` — CI does not auto-bump
-- **Hardcoded experiment registry**: Adding a new experiment requires editing `src/experiments.ts` + `src/types.ts` — not dynamic
+- **Experiment registry (partially mitigated)**: Adding a new experiment still requires three manual edits — `src/types.ts` (the `ExperimentId` union), `src/experiments.ts` (the registry), and `EXPERIMENT_SHADOW_COLORS` (the shadow palette in `src/types.ts`). However, the `ALL_EXPERIMENT_IDS` tuple in `experiments.spec.ts` uses `satisfies readonly ExperimentId[]` to make union-exhaustiveness a TypeScript compile error; the registry-sync deputy tests then fail loudly if the runtime registry or shadow map lags the union. Drift that once required human vigilance now requires a contributor to consciously suppress TS errors and three failing tests.
 - **Font loading dependency**: Google Fonts loaded via CSS `@import` — `display=swap` prevents FOIT but initial render uses fallback fonts
 - **BrandMark inline styles**: Brand colors (#C8102E red, #1A1A1A black) in BrandMark use inline `:style` since they're brand-specific, not lab theme tokens

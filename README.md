@@ -8,7 +8,7 @@ Every experiment in the laboratory needs to communicate. Navigate between them. 
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [`@goosterhof/lab-nav`](./packages/lab-nav/) | `0.2.1` | Vue 3 navigation component library — unified nav bar with experiment switching, local navigation, and user menu |
+| [`@goosterhof/lab-nav`](./packages/lab-nav/) | `1.2.0` | Vue 3 navigation component library — unified nav bar with experiment switching, local navigation, and user menu |
 
 ## Quick Start
 
@@ -57,3 +57,6 @@ This repo is a submodule of the [Zmuuzn Laboratory](https://github.com/Goosterho
 | OAuth2 Authentication | The Gatekeeper | `auth.zmuuzn.nl` |
 | Helldivers 2 Dashboard | The War Table | `helldivers.zmuuzn.nl` |
 | Strava Fitness Dashboard | The Crucible | `strava.zmuuzn.nl` |
+| WebRTC Voice Chat | The Parlour | `parlour.zmuuzn.nl` |
+| Satisfactory Dashboard | The Smokestacks | `smokestacks.zmuuzn.nl` |
+| Diablo 4 Codex | The Horadrim | `horadrim.zmuuzn.nl` |
