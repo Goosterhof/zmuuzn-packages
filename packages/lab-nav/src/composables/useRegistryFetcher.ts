@@ -2,10 +2,24 @@ import {ref, type Ref} from 'vue';
 
 import type {RegistryExperiment} from '../types';
 
-import fallbackData from '../experiments-fallback.json';
+import {experiments as bundledExperiments} from '../experiments';
 
 const REGISTRY_URL = 'https://auth.zmuuzn.nl/api/experiments';
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Bundled fallback registry — projected from the canonical TS registry in `experiments.ts`.
+ * This is the single source of truth for the laboratory's experiment count. If the live
+ * registry endpoint goes dark or returns an empty list, every consumer falls back to this
+ * snapshot. Keeping it derived from the TS registry (instead of a parallel JSON file)
+ * makes drift between the type union, the registry, and the fallback physically impossible.
+ */
+const fallbackData: readonly RegistryExperiment[] = bundledExperiments.map((exp) => ({
+    id: exp.id,
+    label: exp.label,
+    url: exp.url,
+    accentColor: exp.accentColor,
+}));
 
 /** In-memory cache — shared across all LabMap instances in the same page. */
 let cachedExperiments: RegistryExperiment[] | null = null;
@@ -42,7 +56,7 @@ export const useRegistryFetcher = (): {
 
             /* Empty registry means seeder hasn't run — use fallback instead of caching nothing */
             if (list.length === 0) {
-                experiments.value = fallbackData as RegistryExperiment[];
+                experiments.value = [...fallbackData];
                 return;
             }
 
@@ -53,8 +67,8 @@ export const useRegistryFetcher = (): {
             const message = fetchError instanceof Error ? fetchError.message : 'Unknown error';
             error.value = message;
 
-            /* Fallback to bundled static registry */
-            experiments.value = fallbackData as RegistryExperiment[];
+            /* Fallback to the bundled snapshot of the canonical TS registry */
+            experiments.value = [...fallbackData];
         } finally {
             loading.value = false;
         }

@@ -4,10 +4,10 @@ import {describe, it, expect} from 'vitest';
 import ExperimentSwitcher from '../src/components/ExperimentSwitcher.vue';
 
 describe('ExperimentSwitcher', () => {
-    it('should render all four experiments', () => {
+    it('should render all six experiments', () => {
         const wrapper = mount(ExperimentSwitcher, {props: {currentExperiment: 'gatekeeper'}});
         const items = wrapper.findAll('li');
-        expect(items).toHaveLength(4);
+        expect(items).toHaveLength(6);
     });
 
     it('should render the active experiment as a span, not a link', () => {
@@ -24,7 +24,7 @@ describe('ExperimentSwitcher', () => {
     it('should render inactive experiments as links with correct URLs', () => {
         const wrapper = mount(ExperimentSwitcher, {props: {currentExperiment: 'gatekeeper'}});
         const links = wrapper.findAll('a');
-        expect(links).toHaveLength(3);
+        expect(links).toHaveLength(5);
 
         const warTableLink = links.find((a) => a.text() === 'War Room');
         expect(warTableLink?.attributes('href')).toBe('https://helldivers.zmuuzn.nl');
@@ -34,6 +34,12 @@ describe('ExperimentSwitcher', () => {
 
         const parlourLink = links.find((a) => a.text() === 'Parlour');
         expect(parlourLink?.attributes('href')).toBe('https://parlour.zmuuzn.nl');
+
+        const smokestacksLink = links.find((a) => a.text() === 'Smokestacks');
+        expect(smokestacksLink?.attributes('href')).toBe('https://smokestacks.zmuuzn.nl');
+
+        const horadrimLink = links.find((a) => a.text() === 'Horadrim');
+        expect(horadrimLink?.attributes('href')).toBe('https://horadrim.zmuuzn.nl');
     });
 
     it('should apply the experiment accent color to the active underline', () => {

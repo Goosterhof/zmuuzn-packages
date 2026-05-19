@@ -29,4 +29,18 @@ export const experiments: readonly ExperimentConfig[] = [
         accentColor: '#7C3AED',
         exitLabel: 'Leave the circle',
     },
+    {
+        id: 'smokestacks',
+        label: 'Smokestacks',
+        url: 'https://smokestacks.zmuuzn.nl',
+        accentColor: '#22C55E',
+        exitLabel: 'Power down the factory',
+    },
+    {
+        id: 'horadrim',
+        label: 'Horadrim',
+        url: 'https://horadrim.zmuuzn.nl',
+        accentColor: '#C8102E',
+        exitLabel: 'Close the codex',
+    },
 ];
