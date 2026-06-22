@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.7",
-    "@vue/test-utils": "^2.4.0",
+    "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.10.6",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.68.0",
@@ -46,8 +46,8 @@
     "vite": "^8.0.16",
     "vite-plugin-dts": "^5.0.2",
     "vitest": "^4.1.8",
-    "vue": "^3.5.28",
-    "vue-router": "^4.6.4",
-    "vue-tsc": "^3.2.4"
+    "vue": "^3.5.38",
+    "vue-router": "^5.1.0",
+    "vue-tsc": "^3.3.5"
   }
 }
