@@ -36,18 +36,18 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.7",
-    "@vue/test-utils": "^2.4.0",
+    "@vue/test-utils": "^2.4.11",
     "happy-dom": "^20.10.6",
-    "oxfmt": "^0.35.0",
-    "oxlint": "^1.68.0",
-    "oxlint-tsgolint": "^0.23.0",
+    "oxfmt": "^0.58.0",
+    "oxlint": "^1.73.0",
+    "oxlint-tsgolint": "^0.24.0",
     "typescript": "^5.9.3",
-    "unocss": "^66.7.2",
-    "vite": "^8.0.16",
+    "unocss": "^66.7.5",
+    "vite": "^8.1.4",
     "vite-plugin-dts": "^4.5.4",
-    "vitest": "^4.1.8",
+    "vitest": "^4.1.10",
     "vue": "^3.5.28",
     "vue-router": "^4.6.4",
-    "vue-tsc": "^3.2.4"
+    "vue-tsc": "^3.3.5"
   }
 }
