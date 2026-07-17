@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
+
 import {type ExperimentId, type RegistryExperiment, EXPERIMENT_SHADOW_COLORS} from '../types';
 
 const {experiment, current, lastVisited, visitCount, departing, siblingFade} = defineProps<{

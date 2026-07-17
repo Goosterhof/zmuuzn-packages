@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {ref, computed, useTemplateRef, onMounted, onUnmounted} from 'vue';
+
 import type {ExperimentId, LabUser} from '../types';
+
 import {experiments} from '../experiments';
 
 const {currentExperiment} = defineProps<{user: LabUser; currentExperiment: ExperimentId}>();

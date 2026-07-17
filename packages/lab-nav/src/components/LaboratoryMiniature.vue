@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue';
+
 import type {ExperimentId, RegistryExperiment} from '../types';
+
 import {useVisitHistory} from '../composables/useVisitHistory';
 import RoomTile from './RoomTile.vue';
 

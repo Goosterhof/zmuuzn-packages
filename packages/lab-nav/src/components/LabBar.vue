@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed} from 'vue';
+
 import type {ExperimentId, LabUser, LocalNavItem} from '../types';
+
 import {experiments} from '../experiments';
 import BrandMark from './BrandMark.vue';
 import ExperimentSwitcher from './ExperimentSwitcher.vue';

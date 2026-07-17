@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed, ref, onMounted, onUnmounted, nextTick, watch} from 'vue';
+
 import type {ExperimentId} from '../types';
+
 import {useRegistryFetcher} from '../composables/useRegistryFetcher';
 import {useVisitHistory} from '../composables/useVisitHistory';
 import LaboratoryMiniature from './LaboratoryMiniature.vue';

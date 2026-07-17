@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import {computed} from 'vue';
+
 import type {ExperimentId} from '../types';
+
 import {experiments} from '../experiments';
 
 const {size = 'sm', currentExperiment} = defineProps<{size?: 'sm' | 'xs'; currentExperiment?: ExperimentId}>();
