@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.9",
+    "@vue/language-core": "^3.3.12",
     "@vue/test-utils": "^2.5.1",
     "happy-dom": "^20.14.5",
     "oxfmt": "^0.71.0",
