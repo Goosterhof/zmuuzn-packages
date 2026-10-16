@@ -35,20 +35,20 @@
     "vue-router": "^4.6.0 || ^5.0.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.9",
+    "@vitejs/plugin-vue": "^6.0.10",
     "@vue/language-core": "^3.3.12",
     "@vue/test-utils": "^2.5.1",
-    "happy-dom": "^20.14.5",
-    "oxfmt": "^0.71.0",
-    "oxlint": "^1.86.0",
+    "happy-dom": "^20.14.6",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
     "oxlint-tsgolint": "^7.0.2001",
     "typescript": "^5.9.3",
     "unocss": "^66.10.5",
-    "vite": "^8.3.2",
-    "vite-plugin-dts": "^5.1.1",
+    "vite": "^8.3.4",
+    "vite-plugin-dts": "^5.1.2",
     "vitest": "^5.0.3",
     "vue": "^3.5.43",
-    "vue-router": "^5.3.1",
+    "vue-router": "^5.4.0",
     "vue-tsc": "^3.3.12"
   }
 }
