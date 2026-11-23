@@ -39,7 +39,7 @@
     "@vue/language-core": "^3.3.14",
     "@vue/test-utils": "^2.6.0",
     "happy-dom": "^21.0.4",
-    "oxfmt": "^0.78.0",
+    "oxfmt": "^0.79.0",
     "oxlint": "^1.93.0",
     "oxlint-tsgolint": "^7.0.2007",
     "typescript": "^5.9.3",
